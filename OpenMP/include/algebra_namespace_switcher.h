@@ -1,0 +1,8 @@
+#ifndef TMAC_INCLUDE_ALGEBRA_NAMESPACE_SWITCHER_H
+#define TMAC_INCLUDE_ALGEBRA_NAMESPACE_SWITCHER_H
+
+using namespace BLASAlgebra;
+
+
+
+#endif
