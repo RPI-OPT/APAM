@@ -14,10 +14,8 @@ make
 Run the code. Example by 8 threads (1 master and 7 workers), mini-batch = 64, and maxepoch = 100 for solving logistic regression problem on rcv1 data, under bash:
 
 ```sh
-wget -t inf https://www.csie.ntu.edu.tw/~cjlin/libsvmtools/datasets/binary/
-rcv1_train.binary.bz2
-wget -t inf https://www.csie.ntu.edu.tw/~cjlin/libsvmtools/datasets/binary/
-rcv1_test.binary.bz2
+wget -t inf https://www.csie.ntu.edu.tw/~cjlin/libsvmtools/datasets/binary/rcv1_train.binary.bz2
+wget -t inf https://www.csie.ntu.edu.tw/~cjlin/libsvmtools/datasets/binary/rcv1_test.binary.bz2
 bzip2 -d *.bz2
 ./LR_APAM.exe rcv1_train.binary rcv1_test.binary 64 100 8
 ```
