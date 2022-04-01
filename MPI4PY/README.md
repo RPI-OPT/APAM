@@ -30,27 +30,27 @@ The results in section 5.4 and section 5.5 are given in this repository.
 
 On Ubuntu Linux 16.04, Dual Intel Xeon Gold 6130 3.7GHz, 32 CPU cores.
 ### Results with artificial delay 
-<img src="./pictures/Artifical_delat_train_acc.png"  width="400" height="250">
-<img src="./pictures/Artifical_delat_test_acc.png"  width="400" height="250">
+<img src="./pictures/Artifical_delat_train_acc.png"  width="400"/> <img src="./pictures/Artifical_delat_test_acc.png"  width="400">
+
 predication accuracy by APAM for training the AllCNN network on Cifar10 dataset with Python implementation and artificial delay.
 
 ### training the Resnet18 network on CINIC10 dataset  
-<img src="./pictures/CINIC10_time_APAM_sync.png"  width="400" height="250">
+<img src="./pictures/CINIC10_time_APAM_sync.png"  width="400">
+
 running time (hour) on CPU by APAM and the sync-parallel AMSGrad with Python and MPI4PY implementation for one epoch
 
-<img src="./pictures/CINIC10_train_acc.png"  width="400" height="250">
-<img src="./pictures/CINIC10_test_acc.png"  width="400" height="250">
+<img src="./pictures/CINIC10_train_acc.png"  width="400"/> <img src="./pictures/CINIC10_test_acc.png"  width="400" >
+
 prediction accuracy by APAM and the sync-parallel AMSGrad with Python and MPI4PY implementation for training the Resnet18 network on CINIC10 dataset.
 
 ### training the WRN-28-5 on Imagenet32$\times$32 dataset  
-<img src="./pictures/Imagenet32_time_APAM_sync.png"  width="400" height="250">
+<img src="./pictures/Imagenet32_time_APAM_sync.png"  width="400" >
+
 running time (hour) on CPU by APAM and the sync-parallel AMSGrad with Python and MPI4PY implementation for one epoch
 
-<img src="./pictures/Imagenet32_train_acc1.png"  width="400" height="250">
-<img src="./pictures/Imagenet32_test_acc1.png"  width="400" height="250">
+<img src="./pictures/Imagenet32_train_acc1.png"  width="400"  > <img src="./pictures/Imagenet32_test_acc1.png"  width="400">
+<img src="./pictures/Imagenet32_train_acc5.png"  width="400"  > <img src="./pictures/Imagenet32_test_acc5.png"  width="400">
 
-<img src="./pictures/Imagenet32_train_acc5.png"  width="400" height="250">
-<img src="./pictures/Imagenet32_test_acc5.png"  width="400" height="250">
 prediction accuracy by APAM and the sync-parallel AMSGrad with Python and MPI4PY implementation for training the WRN-28-5 network on Imagenet32$\times$32 dataset.
 
 
