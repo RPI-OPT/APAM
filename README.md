@@ -1,6 +1,6 @@
 # APAM: Asynchronous Parallel Adaptive stochastic gradient Method
 
-This repository contains C++-MPI/C++-OpenMP/Python-MP4PY implementation of APAM [(Xu et al. 2020)](#Xu2020).
+This repository contains C++-MPI/C++-OpenMP/Python-MP4PY implementations of APAM [(Xu et al. 2020)](#Xu2020).
 
 ## Reference
 
