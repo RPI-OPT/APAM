@@ -29,7 +29,7 @@ The results in section 5.4 and section 5.5 are given in this repository.
 On a Dell workstation with 32 CPU cores, 64 GB memory, and two Quadro RTX 500 GPUs.
 
 ### Results with artificial delay 
-<img src="./pictures/Artifical_delat_train_acc.png"  width="400"/> <img src="./pictures/Artifical_delat_test_acc.png"  width="400">
+<img src="./pictures/Artifical_delat_train_acc.png"  width="240"/> <img src="./pictures/Artifical_delat_test_acc.png"  width="240">
 
 predication accuracy by APAM for training the AllCNN network on Cifar10 dataset with Python implementation and artificial delay.
 
@@ -38,7 +38,7 @@ predication accuracy by APAM for training the AllCNN network on Cifar10 dataset 
 
 running time (hour) on CPU by APAM and the sync-parallel AMSGrad with Python and MPI4PY implementation for one epoch
 
-<img src="./pictures/CINIC10_train_acc.png"  width="400"/> <img src="./pictures/CINIC10_test_acc.png"  width="400" >
+<img src="./pictures/CINIC10_train_acc.png"  width="240"/> <img src="./pictures/CINIC10_test_acc.png"  width="240" >
 
 prediction accuracy by APAM and the sync-parallel AMSGrad with Python and MPI4PY implementation for training the Resnet18 network on CINIC10 dataset.
 
@@ -47,8 +47,8 @@ prediction accuracy by APAM and the sync-parallel AMSGrad with Python and MPI4PY
 
 running time (hour) on CPU by APAM and the sync-parallel AMSGrad with Python and MPI4PY implementation for one epoch
 
-<img src="./pictures/Imagenet32_train_acc1.png"  width="400"  > <img src="./pictures/Imagenet32_test_acc1.png"  width="400">
-<img src="./pictures/Imagenet32_train_acc5.png"  width="400"  > <img src="./pictures/Imagenet32_test_acc5.png"  width="400">
+<img src="./pictures/Imagenet32_train_acc1.png"  width="240"  > <img src="./pictures/Imagenet32_test_acc1.png"  width="240">
+<img src="./pictures/Imagenet32_train_acc5.png"  width="240"  > <img src="./pictures/Imagenet32_test_acc5.png"  width="240">
 
 prediction accuracy by APAM and the sync-parallel AMSGrad with Python and MPI4PY implementation for training the WRN-28-5 network on Imagenet32 dataset.
 
