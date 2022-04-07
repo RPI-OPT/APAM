@@ -5,8 +5,7 @@ This repository contains a Python-MP4PY implementation of APAM [(Xu et al. 2020)
 The results in section 5.4 and section 5.5 are given in this repository.
   
 
-## Usage
-- Running "run_all.sh" would produce all the results in sections 5.4 and 5.5 [(Xu et al. 2020)](#Xu2020).
+## Usage 
 
 - The folder "models" includes the neural network models ('AllCNN, resnet18, wideresnet28_5').
 - The folder "pictures" includes the plotted results.
