@@ -1,0 +1,31 @@
+The folder "data" should includes three subfolders, each subfolder is one datasets. 
+
+-- The folder "cifar10" includes the cifar10 dataset, which is downloaded directed by "torchvision.datasets.CIFAR10()".
+-- The folder "CINIC-10"  includes the CINIC10 dataset.
+-- The folder "imagenet32" includes the imagenet32 dataset. 
+
+The CINIC-10 and imagenet32 datasets should be saved in the following folder structure. 
+
+train/
+train/class1
+train/class1/image1_in_class1
+train/class1/image2_in_class1
+train/class1/image...
+train/class2
+train/class2/image1_in_class2
+train/class2/image2_in_class2
+train/class2/image...
+train/...
+test/
+test/...
+test/class1
+test/class1/image1_in_class1
+test/class1/image2_in_class1
+test/class1/image...
+test/class2
+test/class2/image1_in_class2
+test/class2/image2_in_class2
+test/class2/image...
+test/...
+
+ 
