@@ -20,7 +20,5 @@ python $function_name --model_name=$model_name --alpha=$alpha --train_batch_size
 python $function_name --model_name=$model_name --alpha=$alpha --train_batch_size=$train_batch_size --epochs=$epochs --opt_name=apam --max_delay=101
 python $function_name --model_name=$model_name --alpha=$alpha --train_batch_size=$train_batch_size --epochs=$epochs --opt_name=apam --max_delay=201
 python $function_name --model_name=$model_name --alpha=$alpha --train_batch_size=$train_batch_size --epochs=$epochs --opt_name=apam --max_delay=401
-echo "plot the predication accuracy about the artifical delay"
-python plot_cifar10_maxdelay.py --epochs=$epochs
 echo
 echo
