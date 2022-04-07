@@ -38,13 +38,13 @@ def test(model, device, pred_train_loader, test_loader, topk=(1,)):
     model.train()
     train_results = validate(model, device, pred_train_loader, topk=topk)
     for key, value in train_results.items():
-        state['train_'+key]=value
+        state['train_'+key] = value
         
     # test on the testing dataset
     model.eval()
     test_results  = validate(model, device, test_loader, topk=topk)
     for key, value in test_results.items():
-        state['test_'+key]=value
+        state['test_'+key] = value
     
     return state
 
@@ -77,10 +77,10 @@ parser.add_argument('--epoch', type=int, default=0)
 parser.add_argument('--log_per_epoch', type=int, default=10)
  
 ## communication
-parser.add_argument('--communication', type=str, default='sync', choices = ['sync','async'])
+parser.add_argument('--communication', type=str, default='sync', choices = ['sync', 'async'])
 
 ##CPU or GPU
-parser.add_argument('--cuda', type=str, default='True', choices=('True','False'))
+parser.add_argument('--cuda', type=str, default='True', choices=('True', 'False'))
 
 def main():
     args = parser.parse_args()
@@ -88,8 +88,8 @@ def main():
     opt_name = args.opt_name
     alpha =  args.alpha
     amsgrad = args.amsgrad
-    beta1 =args.beta1
-    beta2 =args.beta2
+    beta1 = args.beta1
+    beta2 = args.beta2
     epsilon = args.eps
     weight_decay = args.weight_decay
     
@@ -98,7 +98,7 @@ def main():
     epoch = args.epoch
     
     # set the random seed
-    seed = RANK*100+20220329
+    seed = RANK*100 + 20220329
     np.random.seed(seed)
     torch.manual_seed(seed)
     torch.cuda.manual_seed(seed)
@@ -108,7 +108,7 @@ def main():
     device = torch.device("cuda:{}".format(RANK % torch.cuda.device_count()) if (torch.cuda.is_available() and use_cuda) else "cpu")
         
     # read the dateset
-    train_dataset, test_dataset = read_datasets(args.data_name,args.data_dir,device=device)
+    train_dataset, test_dataset = read_datasets(args.data_name, args.data_dir, device=device)
     
     # set the model
     model = getattr(models, args.model_name)(num_classes=args.num_classes).to(device)
@@ -131,30 +131,30 @@ def main():
         my_train_batch_size = train_batch_size//Nworkers
         if  RANK  <  train_batch_size%Nworkers and (RANK != ROOT):
             my_train_batch_size = my_train_batch_size+1
-        train_loader = torch.utils.data.DataLoader( train_dataset, batch_size=my_train_batch_size, shuffle=True, **kwargs)
+        train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=my_train_batch_size, shuffle=True, **kwargs)
     if args.communication == 'async':
-        train_loader = torch.utils.data.DataLoader( train_dataset, batch_size=train_batch_size, shuffle=True, **kwargs)
+        train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=train_batch_size, shuffle=True, **kwargs)
     
     # define the solver APAM
-    pred_train_loader = torch.utils.data.DataLoader( train_dataset, batch_size=pred_train_batch_size, shuffle=True, drop_last=True, **kwargs)
-    test_loader  = torch.utils.data.DataLoader( test_dataset,  batch_size=test_batch_size, shuffle=True, drop_last=True,  **kwargs)
+    pred_train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=pred_train_batch_size, shuffle=True, drop_last=True, **kwargs)
+    test_loader  = torch.utils.data.DataLoader(test_dataset, batch_size=test_batch_size, shuffle=True, drop_last=True, **kwargs)
     
     # number of iterations for one epoch
     num_iter_per_epoch = np.int(np.ceil(len(train_dataset)/train_batch_size))
  
-    w = np.empty(optimizer.num_param,dtype=np.float32)
+    w = np.empty(optimizer.num_param, dtype=np.float32)
 
     if RANK == ROOT:
         # file name of the results
-        filename = args.data_name + '_' + args.model_name +'_'+opt_name+'_comm'+'_'+args.communication+'_SIZE_'+str(SIZE)+'_epochs_'+str(num_epochs) +'_bacthsize'+str(train_batch_size)+'_alpha'+str(alpha)
+        filename = args.data_name + '_' + args.model_name + '_' + opt_name + '_comm_' + args.communication + '_SIZE_' + str(SIZE) + '_epochs_' + str(num_epochs) + '_bacthsize' + str(train_batch_size) + '_alpha' + str(alpha)
         
         if (torch.cuda.is_available() and use_cuda):
             filename = 'GPU' + filename
         else:
             filename = 'CPU' + filename
             
-        print(filename+ ' is computing ..... ',flush=True)
-        f = open('./results/results_'+filename+'.txt' ,"w")
+        print(filename + ' is computing ..... ', flush=True)
+        f = open('./results/results_'+filename+'.txt', "w")
          
          
         ## Initialize the time record
@@ -168,11 +168,11 @@ def main():
         total_test_time += time.time()-test_time0
 
         # print the results titles to the file and screen
-        print('epoch\t' + ''.join([str(key)+'\t' for key in test_state.keys()])+'time_since_begin(without testing)\t time_since_begin(with testing)',flush=True)
-        f.write('epoch\t' + ''.join([str(key)+'\t' for key in test_state.keys()])+'time_since_begin(without testing)\t time_since_begin(with testing)\n')
+        print('epoch\t' + ''.join([str(key)+'\t' for key in test_state.keys()]) + 'time_since_begin(without testing)\t time_since_begin(with testing)', flush=True)
+        f.write('epoch\t' + ''.join([str(key)+'\t' for key in test_state.keys()]) + 'time_since_begin(without testing)\t time_since_begin(with testing)\n')
         # print the initial results to the file and screen
-        print('{}\t'.format(epoch) + ''.join(['{:.4f}\t'.format(value) for value in test_state.values()])+'{:.4f}\t {:.4f}'.format(time.time()-time_start-total_test_time, time.time()-time_start),flush=True)
-        f.write('{}\t'.format(epoch) + ''.join(['{:.4f}\t'.format(value) for value in test_state.values()])+'{:.4f}\t {:.4f}\n'.format(time.time()-time_start-total_test_time, time.time()-time_start))
+        print('{}\t'.format(epoch) + ''.join(['{:.4f}\t'.format(value) for value in test_state.values()]) + '{:.4f}\t {:.4f}'.format(time.time()-time_start-total_test_time, time.time()-time_start), flush=True)
+        f.write('{}\t'.format(epoch) + ''.join(['{:.4f}\t'.format(value) for value in test_state.values()]) + '{:.4f}\t {:.4f}\n'.format(time.time()-time_start-total_test_time, time.time()-time_start))
  
         w = optimizer.pack_w()
     
@@ -182,34 +182,34 @@ def main():
     
     # a variable which be change to a small number while debugging
     #max_iter_per_epoch = 1000
-    max_iter_per_epoch =  num_iter_per_epoch
+    max_iter_per_epoch = num_iter_per_epoch
     
     # loop about the epoch
-    while epoch<num_epochs:
-        epoch+=1 
+    while epoch < num_epochs:
+        epoch += 1
  
         # do the synchronous training
         if args.communication == 'sync':
             if RANK==ROOT:
-                train_sync_master(max_iter_per_epoch,optimizer)
+                train_sync_master(max_iter_per_epoch, optimizer)
             else:
-                train_sync_worker(model, device, num_iter_per_epoch, train_loader,optimizer)
+                train_sync_worker(model, device, num_iter_per_epoch, train_loader, optimizer)
                  
         # do the asynchronous training
         if args.communication == 'async':
             if RANK==ROOT:
-                train_async_master(max_iter_per_epoch,optimizer)
+                train_async_master(max_iter_per_epoch, optimizer)
             else:
-                train_async_worker(model,device,train_loader,optimizer)
+                train_async_worker(model,device, train_loader, optimizer)
              
         # do the testing
         if (RANK==ROOT) and (epoch%args.log_per_epoch==0 or epoch==1):
             test_time0 = time.time()
             if use_cuda: test_state = test(model, device, pred_train_loader, test_loader, topk=topk)
-            total_test_time += time.time()-test_time0
+            total_test_time += time.time() - test_time0
             # print the results to the file and screen
-            print('{}\t'.format(epoch) + ''.join(['{:.4f}\t'.format(value) for value in test_state.values()])+'{:.4f}\t {:.4f}'.format(time.time()-time_start-total_test_time, time.time()-time_start),flush=True)
-            f.write('{}\t'.format(epoch) + ''.join(['{:.4f}\t'.format(value) for value in test_state.values()])+'{:.4f}\t {:.4f}\n'.format(time.time()-time_start-total_test_time, time.time()-time_start))
+            print('{}\t'.format(epoch) + ''.join(['{:.4f}\t'.format(value) for value in test_state.values()]) + '{:.4f}\t {:.4f}'.format(time.time()-time_start-total_test_time, time.time()-time_start), flush=True)
+            f.write('{}\t'.format(epoch) + ''.join(['{:.4f}\t'.format(value) for value in test_state.values()]) + '{:.4f}\t {:.4f}\n'.format(time.time()-time_start-total_test_time, time.time()-time_start))
  
         if (RANK==ROOT):  w = optimizer.pack_w()
         # synchronous after every epoch

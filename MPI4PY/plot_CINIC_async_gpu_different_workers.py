@@ -29,38 +29,38 @@ def main():
     results_2 = np.loadtxt(dir2,skiprows=1, max_rows=max_rows)
     results_3 = np.loadtxt(dir3,skiprows=1, max_rows=max_rows)
 
-    linewidth=1.5
-    markevery1=1
-    markevery2=1
-    markevery3=1
-    markevery4=1
+    linewidth = 1.5
+    markevery1 = 1
+    markevery2 = 1
+    markevery3 = 1
+    markevery4 = 1
     
-    plt.figure(figsize=(6, 4))
-    plt.plot(results_0[:,0],results_0[:,2]/100,'k-^',markevery=markevery1,linewidth=linewidth,label='APAM1')
-    plt.plot(results_1[:,0],results_1[:,2]/100,'r-*',markevery=markevery2,linewidth=linewidth,label='APAM2')
-    plt.plot(results_2[:,0],results_2[:,2]/100,'r-s',markevery=markevery3,linewidth=linewidth,label='APAM5')
-    plt.plot(results_3[:,0],results_3[:,2]/100,'r-p',markevery=markevery4,linewidth=linewidth,label='APAM10')
-    plt.xlabel('epoch number',fontsize=18)
-    plt.ylabel('training accuracy',fontsize=18)
-    plt.legend(fontsize=18,loc='lower right')
-    plt.ylim(0.40,1.01)
-    plt.xlim(0,Epoch)
+    plt.figure(figsize = (6, 4))
+    plt.plot(results_0[:,0], results_0[:,2]/100, 'k-^', markevery=markevery1, linewidth=linewidth, label='APAM1')
+    plt.plot(results_1[:,0], results_1[:,2]/100, 'r-*', markevery=markevery2, linewidth=linewidth, label='APAM2')
+    plt.plot(results_2[:,0], results_2[:,2]/100, 'r-s', markevery=markevery3, linewidth=linewidth, label='APAM5')
+    plt.plot(results_3[:,0], results_3[:,2]/100, 'r-p', markevery=markevery4, linewidth=linewidth, label='APAM10')
+    plt.xlabel('epoch number', fontsize=18)
+    plt.ylabel('training accuracy', fontsize=18)
+    plt.legend(fontsize=18, loc='lower right')
+    plt.ylim(0.40, 1.01)
+    plt.xlim(0, Epoch)
     savename = 'CINIC10_train_acc'
-    plt.savefig('./pictures/'+savename+'.pdf',bbox_inches='tight',format='pdf')
+    plt.savefig('./pictures/'+savename+'.pdf', bbox_inches='tight', format='pdf')
 #    plt.show()
     
-    plt.figure(figsize=(6, 4))
-    plt.plot(results_0[:,0],results_0[:,4]/100,'k-^',markevery=markevery1,linewidth=linewidth,label='APAM1')
-    plt.plot(results_1[:,0],results_1[:,4]/100,'r-*',markevery=markevery2,linewidth=linewidth,label='APAM2')
-    plt.plot(results_2[:,0],results_2[:,4]/100,'r-s',markevery=markevery3,linewidth=linewidth,label='APAM5')
-    plt.plot(results_3[:,0],results_3[:,4]/100,'r-p',markevery=markevery4,linewidth=linewidth,label='APAM10')
-    plt.xlabel('epoch number',fontsize=18)
-    plt.ylabel('testing accuracy',fontsize=18)
-    plt.legend(fontsize=18,loc='lower right')
-    plt.ylim(0.40,0.91)
-    plt.xlim(0,Epoch)
+    plt.figure(figsize = (6, 4))
+    plt.plot(results_0[:,0], results_0[:,4]/100, 'k-^', markevery=markevery1, linewidth=linewidth, label='APAM1')
+    plt.plot(results_1[:,0], results_1[:,4]/100, 'r-*', markevery=markevery2, linewidth=linewidth, label='APAM2')
+    plt.plot(results_2[:,0], results_2[:,4]/100, 'r-s', markevery=markevery3, linewidth=linewidth, label='APAM5')
+    plt.plot(results_3[:,0], results_3[:,4]/100, 'r-p', markevery=markevery4, linewidth=linewidth, label='APAM10')
+    plt.xlabel('epoch number', fontsize=18)
+    plt.ylabel('testing accuracy', fontsize=18)
+    plt.legend(fontsize=18, loc='lower right')
+    plt.ylim(0.40, 0.91)
+    plt.xlim(0, Epoch)
     savename = 'CINIC10_test_acc'
-    plt.savefig('./pictures/'+savename+'.pdf',bbox_inches='tight',format='pdf')
+    plt.savefig('./pictures/'+savename+'.pdf', bbox_inches='tight', format='pdf')
 #    plt.show()
 
 if __name__ == '__main__':

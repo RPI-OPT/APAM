@@ -22,7 +22,7 @@ from typing import Iterable
 from torch import Tensor
 Params = Iterable[Tensor]
 class APAM:
-    def __init__(self, params:Params, device, opt_name='apam', alpha: float=1e-4, amsgrad: bool=True,beta1: float=0.9,beta2: float=0.99,epsilon: float=1e-8):
+    def __init__(self, params:Params, device, opt_name='apam', alpha: float=1e-4, amsgrad: bool=True, beta1: float=0.9, beta2: float=0.99, epsilon: float=1e-8):
         self.params = list(params)
         self.device = device
         self.num_set = len(self.params)
@@ -69,12 +69,12 @@ class APAM:
 #             print(param)
           
     def pack_w(self): # pack from tensor ( parameters in the model) to float array (change w)
-        w = np.concatenate([param.data.cpu().numpy().flatten() for param in self.params ])
+        w = np.concatenate([param.data.cpu().numpy().flatten() for param in self.params])
         if w.dtype != np.float32: w=w.astype(np.float32)
         return w
   
     def pack_g(self):  # pack from tensor ( gradient in the model) to float array (change g)
-        g = np.concatenate([param.grad.data.cpu().numpy().flatten() for param in self.params ])
+        g = np.concatenate([param.grad.data.cpu().numpy().flatten() for param in self.params])
         if g.dtype != np.float32: g=g.astype(np.float32)
         return g
     
@@ -85,7 +85,6 @@ class APAM:
             param.grad.data.copy_(torch.tensor(np.zeros(self.set_shape[idx])))
     
     def step(self,w,g):
-        
         self.step_num +=1
         
         if self.opt_name == 'sgd':
@@ -95,10 +94,10 @@ class APAM:
                 
             step_size = self.alpha*np.sqrt(1 - np.power(self.beta2,self.step_num)) / (1 - np.power(self.beta1,self.step_num))
   
-            self.m = self.m*self.beta1+(1-self.beta1)*g
-            self.v = self.v*self.beta2+(1-self.beta2)*(g**2)
+            self.m = self.m*self.beta1 + (1-self.beta1)*g
+            self.v = self.v*self.beta2 + (1-self.beta2)*(g**2)
             if self.amsgrad:
-                self.v_hat = np.maximum(self.v,self.v_hat)
+                self.v_hat = np.maximum(self.v, self.v_hat)
                 denom = np.sqrt(self.v_hat) + self.epsilon
             else:
                 denom = np.sqrt(self.v) + self.epsilon
@@ -116,7 +115,7 @@ def train_max_delay(model, train_loader, num_iter_per_epoch, optimizer, device, 
         
     max_delay = len(ws)
     dataiter = train_loader.__iter__()
-    num_iter=0
+    num_iter = 0
     model.train()
     # loop for the data samples in one epoch
     for i in range(num_iter_per_epoch):
@@ -131,7 +130,7 @@ def train_max_delay(model, train_loader, num_iter_per_epoch, optimizer, device, 
         
         # randomly select one model with the maximum delay
         # and put the selected delayed model to the solver
-        optimizer.unpack( ws[np.random.randint( min(max_delay,optimizer.step_num+1) )] )
+        optimizer.unpack(ws[np.random.randint(min(max_delay,optimizer.step_num+1))])
         
         # get the stochastic gradient at the delayed model
         optimizer.zero_grad()
@@ -150,7 +149,7 @@ def train_max_delay(model, train_loader, num_iter_per_epoch, optimizer, device, 
     return pos_now
  
 ## test with the current model, return the test loss and accuracy
-def test(model,device,test_loader):
+def test(model, device, test_loader):
     test_loss = 0
     correct = 0
     model.eval()
@@ -165,7 +164,7 @@ def test(model,device,test_loader):
         test_loss /= len(test_loader.dataset)
         test_acc = 100. * correct / len(test_loader.dataset)
         
-    return  [test_loss,test_acc]
+    return [test_loss, test_acc]
      
 #### hyper-parameters
 import argparse
@@ -177,7 +176,7 @@ parser.add_argument('--data_dir', type=str, default='./data/cifar10')
 parser.add_argument('--model_name', type=str, default='AllCNN')
 
 ## optimizer
-parser.add_argument('--opt_name', type=str, default='apam', choices = ['sgd','apam'])
+parser.add_argument('--opt_name', type=str, default='apam', choices=['sgd','apam'])
 parser.add_argument('--alpha', type=float, default=0.0001)
 parser.add_argument('--amsgrad', type=bool, default=True)
 parser.add_argument('--beta1', type=float, default=0.9)
@@ -206,8 +205,8 @@ def main():
     opt_name = args.opt_name
     alpha =  args.alpha
     amsgrad = args.amsgrad
-    beta1 =args.beta1
-    beta2 =args.beta2
+    beta1 = args.beta1
+    beta2 = args.beta2
     epsilon = args.eps
     
     # epochs
@@ -235,28 +234,28 @@ def main():
     test_batch_size = args.test_batch_size
     # define the loader
     kwargs = {'num_workers': 1, 'pin_memory': True} if (torch.cuda.is_available() and use_cuda) else {}
-    train_loader = torch.utils.data.DataLoader( train_dataset, batch_size=train_batch_size, shuffle=True, **kwargs)
-    pred_train_loader = torch.utils.data.DataLoader( train_dataset, batch_size=pred_train_batch_size, shuffle=False, **kwargs)
-    test_loader  = torch.utils.data.DataLoader( test_dataset,  batch_size=test_batch_size, shuffle=False, **kwargs)
+    train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=train_batch_size, shuffle=True, **kwargs)
+    pred_train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=pred_train_batch_size, shuffle=False, **kwargs)
+    test_loader  = torch.utils.data.DataLoader(test_dataset,  batch_size=test_batch_size, shuffle=False, **kwargs)
     
     # number of iterations for one epoch
     num_iter_per_epoch = np.int(np.ceil(len(train_dataset)/train_batch_size))
   
     # file name of the results
-    filename = './results/results_cifar10_allcnn' + '_'+opt_name+'_epochs'+str(num_epochs)+'_bacthsize'+str(train_batch_size)+'_MaxDelay' +str(max_delay)+'.txt'
-    f = open(filename,"w")
+    filename = './results/results_cifar10_allcnn' + '_' + opt_name + '_epochs' + str(num_epochs) + '_bacthsize' + str(train_batch_size) + '_MaxDelay' + str(max_delay) + '.txt'
+    f = open(filename, "w")
     # print the file name to the screen
-    print(filename+ ' is computing ..... ',flush=True)
+    print(filename+ ' is computing ..... ', flush=True)
     
         
     # print the results titles in the file and screen
     f.write('epoch\t test_loss\t test_acc\t train_loss\t train_acc \t time_since_begin(without testing)\t time_since_begin(with tetsing)\n')
-    print('epoch\t test_loss\t test_acc\t train_loss\t train_acc \t time_since_begin(without testing)\t time_since_begin(with testing) ',flush=True)
+    print('epoch\t test_loss\t test_acc\t train_loss\t train_acc \t time_since_begin(without testing)\t time_since_begin(with testing)', flush=True)
      
     # define the neural network model
     model = getattr(models, args.model_name)().to(device)
     # define the solver APAM
-    optimizer = APAM(model.parameters(),device=device,opt_name=opt_name, alpha=alpha,amsgrad=amsgrad,beta1=beta1,beta2=beta2,epsilon=epsilon)
+    optimizer = APAM(model.parameters(), device=device, opt_name=opt_name, alpha=alpha, amsgrad=amsgrad, beta1=beta1, beta2=beta2, epsilon=epsilon)
     
     # ws is the memory for the "max_delay" memory
     # the initial model is put at the 0 position.
@@ -269,7 +268,7 @@ def main():
     # loop about the epoch
     while epoch<num_epochs:
         pos_now = train_max_delay(model, train_loader, num_iter_per_epoch, optimizer, device, ws, pos_now)
-        epoch+=1
+        epoch += 1
         
         # for every args.log_per_epoch epochs, do the test and print the results to the file and screen
         # the test is based on current model
@@ -277,13 +276,13 @@ def main():
         if (epoch%args.log_per_epoch==0):
             test_time0 = time.time()
             
-            [test_loss,  test_acc]  = test(model, device, test_loader)
+            [test_loss, test_acc]  = test(model, device, test_loader)
             [train_loss, train_acc] = test(model, device, pred_train_loader)
             
             total_test_time += time.time()-test_time0
             # print the results to the file and screen
-            print('{}\t {}\t {}\t {}\t {}\t{}\t{}'.format(epoch, test_loss, test_acc, train_loss, train_acc,time.time()-time_start-total_test_time,time.time()-time_start),flush=True)
-            f.write('{}\t {}\t {}\t {}\t {}\t{}\t{}\n'.format(epoch, test_loss, test_acc, train_loss, train_acc,time.time()-time_start-total_test_time,time.time()-time_start))
+            print('{}\t {}\t {}\t {}\t {}\t{}\t{}'.format(epoch, test_loss, test_acc, train_loss, train_acc, time.time()-time_start-total_test_time, time.time()-time_start), flush=True)
+            f.write('{}\t {}\t {}\t {}\t {}\t{}\t{}\n'.format(epoch, test_loss, test_acc, train_loss, train_acc, time.time()-time_start-total_test_time, time.time()-time_start))
            
     f.close()
         

@@ -7,7 +7,7 @@ Params = Iterable[Tensor]
 
 ### define the optimizer
 class APAM:
-    def __init__(self, params:Params, device, opt_name='apam', alpha: float=1e-4, amsgrad: bool=True,beta1: float=0.9,beta2: float=0.99,epsilon: float=1e-8, weight_decay=0.):
+    def __init__(self, params:Params, device, opt_name='apam', alpha: float=1e-4, amsgrad: bool=True, beta1: float=0.9, beta2: float=0.99, epsilon: float=1e-8, weight_decay=0.):
         
         # optimization variables
         self.params = list(params)
@@ -68,7 +68,7 @@ class APAM:
 
     def pack_g(self):  # pack from tensor ( gradient in the model) to float array (change g)
         # used by the workers.
-        g = np.concatenate([param.grad.data.cpu().numpy().flatten() for param in self.params ])
+        g = np.concatenate([param.grad.data.cpu().numpy().flatten() for param in self.params])
         if g.dtype != np.float32: g=g.astype(np.float32)
         return g
 
@@ -89,8 +89,8 @@ class APAM:
             
         if self.opt_name == 'apam':
             step_size = self.alpha*np.sqrt(1 - np.power(self.beta2,self.step_num)) / (1 - np.power(self.beta1,self.step_num))
-            self.m = self.m*self.beta1+(1-self.beta1)*g
-            self.v = self.v*self.beta2+(1-self.beta2)*(g**2)
+            self.m = self.m*self.beta1 + (1-self.beta1)*g
+            self.v = self.v*self.beta2 + (1-self.beta2)*(g**2)
             if self.amsgrad:
                 self.v_hat = np.maximum(self.v,self.v_hat)
                 denom = np.sqrt(self.v_hat) + self.epsilon
@@ -123,24 +123,24 @@ def train_sync_master(num_iter_per_epoch, optimizer):
     ave_g = np.zeros(optimizer.num_param,dtype=np.float32)
     gs = np.empty((SIZE,optimizer.num_param),dtype=np.float32)
  
-    num_iter=0
+    num_iter = 0
     w = optimizer.pack_w()
     
     for i in range(num_iter_per_epoch):
         # get gradient to workers and send model to workers
-        g = np.zeros(optimizer.num_param,dtype=np.float32)
+        g = np.zeros(optimizer.num_param, dtype=np.float32)
         COMM.Gather(g, gs, root=0) # synchronous
         ave_g = gs[peers].mean(axis=0)
-        optimizer.step(w,ave_g)
+        optimizer.step(w, ave_g)
         COMM.Bcast(w, root=ROOT) # synchronous
          
     optimizer.unpack(w)
                 
 # synchronous worker, training for one epoch
-def train_sync_worker(model,device,num_iter_per_epoch,train_loader,optimizer):
+def train_sync_worker(model, device, num_iter_per_epoch, train_loader,optimizer):
     
-    w = np.empty(optimizer.num_param,dtype=np.float32)
-    g = np.empty(optimizer.num_param,dtype=np.float32)
+    w = np.empty(optimizer.num_param, dtype=np.float32)
+    g = np.empty(optimizer.num_param, dtype=np.float32)
     gs = None
     dataiter = train_loader.__iter__()
     model.train()
@@ -169,17 +169,17 @@ def train_sync_worker(model,device,num_iter_per_epoch,train_loader,optimizer):
         optimizer.unpack(w)
 
 # asynchronous master, training for one epoch
-def train_async_master(num_iter_per_epoch,optimizer):
+def train_async_master(num_iter_per_epoch, optimizer):
 
     peers = list(range(SIZE)); peers.remove(ROOT)
     N_peers = len(peers)
-    w = np.empty(optimizer.num_param,dtype=np.float32)
-    g = np.empty(optimizer.num_param,dtype=np.float32)
+    w = np.empty(optimizer.num_param, dtype=np.float32)
+    g = np.empty(optimizer.num_param, dtype=np.float32)
     
     
     ## gg is used to storage the gradnets from all workers
     ## requests is the asynchronous receive request from all workers
-    gg =  np.empty((N_peers,optimizer.num_param),dtype=np.float32)
+    gg =  np.empty((N_peers,optimizer.num_param), dtype=np.float32)
     requests  = [MPI.REQUEST_NULL for i in peers]
     for i in range(N_peers):
         requests[i] = COMM.Irecv(gg[i], source=peers[i])
@@ -188,33 +188,34 @@ def train_async_master(num_iter_per_epoch,optimizer):
     w = optimizer.pack_w()
     num_active_workers = N_peers
     # do the loop in one epoch
-    while  num_active_workers >0:
+    while  num_active_workers > 0:
         idx_of_received_list = MPI.Request.Waitsome(requests)
         for i in idx_of_received_list:
             ## update the model with the received gradient
-            optimizer.step(w,gg[i])
+            optimizer.step(w, gg[i])
             n_master_receive_each_epoch += 1
             if n_master_receive_each_epoch < num_iter_per_epoch:
                 # not enough gradients are received for one epoch
                 # the update should continue
                 # send the current model to the worker with tag="Not_Done"
-                COMM.Send(w, dest = peers[i], tag = NOT_DONE)
-                requests[i] = COMM.Irecv(gg[i],source=peers[i])
+                COMM.Send(w, dest=peers[i], tag=NOT_DONE)
+                requests[i] = COMM.Irecv(gg[i], source=peers[i])
             else:
                 # enough gradients are received for one epoch
                 # the update should stop
                 # send the current model to the worker with tag="Done"
-                COMM.Send(w, dest = peers[i], tag = DONE)
+                COMM.Send(w, dest=peers[i], tag=DONE)
                 num_active_workers -=1
  
     optimizer.unpack(w)
 
 # asynchronous worker, training for one epoch
-def train_async_worker(model,device,train_loader,optimizer):
+def train_async_worker(model, device, train_loader, optimizer):
     
-    w = np.empty(optimizer.num_param,dtype=np.float32)
-    g = np.empty(optimizer.num_param,dtype=np.float32)
-    info = MPI.Status(); info.tag = NOT_DONE
+    w = np.empty(optimizer.num_param, dtype=np.float32)
+    g = np.empty(optimizer.num_param, dtype=np.float32)
+    info = MPI.Status()
+    info.tag = NOT_DONE
     dataiter = train_loader.__iter__()
     model.train()
     
@@ -239,17 +240,17 @@ def train_async_worker(model,device,train_loader,optimizer):
         g = optimizer.pack_g()
         
         # send gradient to master and get a new model from master
-        COMM.Send(g, dest = ROOT)
-        COMM.Recv(w, source=ROOT,tag=MPI.ANY_TAG,status=info)
+        COMM.Send(g, dest=ROOT)
+        COMM.Recv(w, source=ROOT, tag=MPI.ANY_TAG, status=info)
         optimizer.unpack(w)
 
 # test the model
 def validate(model, device, val_loader, topk=(1,)):
     maxk = max(topk)
     test_loss = 0
-    corrects={}
+    corrects = {}
     for k in topk:
-        corrects[k]=0
+        corrects[k] = 0
     
     total = 0
     with torch.no_grad():

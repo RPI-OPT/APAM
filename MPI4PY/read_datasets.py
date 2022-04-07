@@ -3,7 +3,7 @@ import torch
 import torchvision.datasets as datasets
 import torchvision.transforms as transforms
 
-def read_datasets(dataset_name, data_dir=None,device='cpu'):
+def read_datasets(dataset_name, data_dir=None, device='cpu'):
     if data_dir==None:
         data_dir = './data/' + dataset_name + '/'
         
@@ -49,16 +49,16 @@ def read_datasets(dataset_name, data_dir=None,device='cpu'):
       
     if dataset_name in ['imagenet32']:
     
-        mean_image = np.load(data_dir+'image_mean.npy')
+        mean_image = np.load(data_dir + 'image_mean.npy')
      
         train_transform = transforms.Compose([
             transforms.RandomCrop(32, padding=4),
             transforms.RandomHorizontalFlip(),
             transforms.ToTensor(),
-            MoveTransformation(torch.tensor(mean_image,dtype=torch.float32)),
+            MoveTransformation(torch.tensor(mean_image, dtype=torch.float32)),
         ])
         
-        valid_transform = transforms.Compose([transforms.ToTensor(), MoveTransformation(torch.tensor(mean_image,dtype=torch.float32)),])
+        valid_transform = transforms.Compose([transforms.ToTensor(), MoveTransformation(torch.tensor(mean_image, dtype=torch.float32)),])
         
     if dataset_name in ['CINIC-10', 'imagenet32']:
         # Data loading code

@@ -11,7 +11,7 @@ def read_time(dir0):
         
     elements = lines[-2].split(' ')
     
-    return [int(elements[5]),float(elements[2])/3600]
+    return [int(elements[5]), float(elements[2])/3600]
     
 data_label=['#workers', 'Training Time (hour)']
 
@@ -47,20 +47,20 @@ def main():
         train_times_sync.append(result[1])
 
     fig = plt.figure(figsize=(7, 3))
-    name_list = ['1','5','10','20']
+    name_list = ['1', '5', '10', '20']
     x = np.arange(len(name_list))
     total_width, n = 0.6, 2
     width = total_width / n
     label_font=18
-    plt.bar(x[:]-width/2-0.02, train_times_async[:], width=width, label='APAM',fc='r')
+    plt.bar(x[:]-width/2-0.02, train_times_async[:], width=width, label='APAM', fc='r')
     plt.bar(x,[0,0,0,0], tick_label=name_list, width=0.2)
-    plt.bar(x[:]+width/2+0.02, train_times_sync[:], width=width, label='sync method',fc='b')
+    plt.bar(x[:]+width/2+0.02, train_times_sync[:], width=width, label='sync method', fc='b')
     plt.legend(fontsize=label_font)
-    plt.ylabel('times (hour)',fontsize=label_font)
-    plt.xlabel('#worker process',fontsize=label_font)
+    plt.ylabel('times (hour)', fontsize=label_font)
+    plt.xlabel('#worker process', fontsize=label_font)
        
     savename = 'Imagenet32_time_APAM_sync'
-    plt.savefig('./pictures/'+savename+'.pdf',bbox_inches='tight',format='pdf')
+    plt.savefig('./pictures/'+savename+'.pdf', bbox_inches='tight', format='pdf')
 
 #    plt.show()
 
