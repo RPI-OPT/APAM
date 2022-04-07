@@ -34,7 +34,7 @@ On a Dell workstation with 32 CPU cores, 64 GB memory, and two Quadro RTX 500 GP
 predication accuracy by APAM for training the AllCNN network on Cifar10 dataset with Python implementation and artificial delay.
 
 ### Training Resnet18 network on [CINIC10](https://github.com/BayesWatch/cinic-10)
-<img src="./pictures/CINIC10_time_APAM_sync.png"  width="400">
+<img src="./pictures/CINIC10_time_APAM_sync.png"  width="300">
 
 running time (hour) on CPU by APAM and the sync-parallel AMSGrad with Python and MPI4PY implementation for one epoch
 
@@ -43,7 +43,7 @@ running time (hour) on CPU by APAM and the sync-parallel AMSGrad with Python and
 prediction accuracy by APAM and the sync-parallel AMSGrad with Python and MPI4PY implementation for training the Resnet18 network on CINIC10 dataset.
 
 ### Training WRN-28-5 on [Imagenet32](https://image-net.org/download-images)  
-<img src="./pictures/Imagenet32_time_APAM_sync.png"  width="400" >
+<img src="./pictures/Imagenet32_time_APAM_sync.png"  width="300" >
 
 running time (hour) on CPU by APAM and the sync-parallel AMSGrad with Python and MPI4PY implementation for one epoch
 
