@@ -1,4 +1,4 @@
-# APAM: Asynchronous Parallel Adaptive stochastic gradient Method
+# APAM: Parallel and distributed asynchronous adaptive stochastic gradient methods
 
 This repository contains a Python-MP4PY implementation of APAM [(Xu et al. 2020)](#Xu2020).
 
@@ -62,4 +62,4 @@ prediction accuracy by APAM and the sync-parallel AMSGrad with Python and MPI4PY
 
 ## Reference
 
-- <a name="Xu2020"></a>Yangyang Xu, Yibo Xu, Yonggui Yan, Colin Sutcher-Shepard, Leopold Grinberg, and Jie Chen. [Asynchronous parallel adaptive stochastic gradient methods](https://arxiv.org/abs/2002.09095). Preprint arXiv:2002.09095, 2020.
+- <a name="Xu2020"></a>Yangyang Xu, Yibo Xu, Yonggui Yan, Colin Sutcher-Shepard, Leopold Grinberg, and Jie Chen. [Parallel and distributed asynchronous adaptive stochastic gradient methods](https://arxiv.org/abs/2002.09095). Preprint arXiv:2002.09095, 2020.
